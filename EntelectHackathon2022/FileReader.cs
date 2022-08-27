@@ -10,7 +10,7 @@ namespace EntelectHackathon2022
     {
         private string[] important = new string[] {};
         //The map folder containing the txt file is in the binary folder in debug
-        public static string path = @"C:/Users/clift/source/repos/EntelectHackathon2022/EntelectHackathon2022/EntelectHackathon2022/Map/";
+        public static string path = @"../Map/";
 
         public string[] Read()
         {
