@@ -147,7 +147,40 @@ namespace EntelectHackathon2022
         {
             FileReader fileReader = new FileReader();
             string[] MapData = fileReader.Read();
-            Console.WriteLine(MapData);
+            //Console.WriteLine(MapData);
+
+            Parser indexingComponents = new Parser();
+            string stepAll = indexingComponents.getStepALLowance(MapData);
+            string[] Coal = indexingComponents.getCoal(MapData);
+            string[] Fish = indexingComponents.getFish(MapData);
+            //string[] scrap = indexingComponents.getScrap_Metal(MapData);
+            string Quaota = indexingComponents.getQuota(MapData);
+            string QuoataM = indexingComponents.getQuotaM(MapData);
+            string[] mapSize = indexingComponents.getMapSize(MapData);
+            string[] map = indexingComponents.getMap(MapData);
+
+            foreach (string s in Coal)
+            {
+                Console.WriteLine("Coal: "+s);
+            }
+            foreach (string s in Fish)
+            {
+                Console.WriteLine("Fish: " + s);
+            }
+            //foreach (string s in scrap)
+            //{
+            //    Console.WriteLine(s);
+            //}
+                Console.WriteLine("Quato: " + Quaota);
+                Console.WriteLine("Qiadm: " + QuoataM);
+            foreach (string s in mapSize)
+            {
+                Console.WriteLine("mapsize: " + s);
+            }
+            foreach (string s in map)
+            {
+                Console.WriteLine("map: " + s);
+            }
         }
 
         

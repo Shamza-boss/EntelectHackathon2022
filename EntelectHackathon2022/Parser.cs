@@ -7,189 +7,115 @@ using System.Threading.Tasks;
 namespace EntelectHackathon2022
 {
     public class Parser
-    {
-        //map x and y length
-        public Vector2int MapSize { get; private set; }
-        //Stores map data that is converted to int
-        public int[] Data { get; private set; }
-        //the whole text file
-        public string Map { get; private set; }
-
-        public List<Landscape> landscapes { get; private set; }
-
-        public Parser(int textFileNo)
+       {
+        public static List<string> coal = new List<string>();
+        public static List<string> fish = new List<string>();
+        public static List<string> scrap = new List<string>();
+        public int numRowsC;
+        public int numRowsF;
+        public int numRowsS;
+        public int vals = 3;
+        public string getStepALLowance(string[] data)
         {
-            string[] all = ReadAllTextFiles();
-
-            //choose text file to parse
-            ParseText(all[textFileNo]);
+            string[] stepallowanceValue = data[0].Split("=");
+            return stepallowanceValue[1];
         }
-        public Parser(string txtName)
+        public string[] getCoal(string[] data)
         {
-            string fullPath = Path.Combine(Environment.CurrentDirectory, @"..\..\..", "maps", txtName);
 
-
-            ParseText(File.ReadAllText(fullPath));
-        }
-
-        void ParseText(string text)
-        {
-            landscapes = new List<Landscape>();
-
-            int i = 0;
-
-            while (text.Substring(i++, 9) != "map_size=") { }
-
-            i += 8;
-
-            string y = "";
-            while (text[i] != ',')
-                y += text[i++];
-
-            ++i;
-
-            string x = "";
-            while (text[i] != '\n' && text[i] != '\r' && text[i] != ' ')
-                x += text[i++];
-
-            MapSize = new Vector2int(int.Parse(x), int.Parse(y));
-
-            while (!char.IsDigit(text[i++])) { }
-
-            --i;
-
-            for (; ; i++)
+            string[] Coal = data[1].Split(",");
+            numRowsC += int.Parse(Coal[1]);
+            int coals = 0;
+            for (int i = numRowsC; i < numRowsC; i++)
             {
-                if (char.IsDigit(text[i]))
-                    Map += text[i];
+                coal.Add(data[i]);
+                coals++;
+            }
+            numRowsC = coals+1;
+            return coal.ToArray();
+        }
+        public string[] getFish(string[] data)
+        {
+            
+            string[] Fish = data[numRowsC + 2].Split(",");
+            numRowsF = numRowsC + int.Parse(Fish[1]);
+            Console.WriteLine("Num rows C " + numRowsC);
+            int fishs = 0;
+            for (int i = numRowsF; i < numRowsF; i++)
+            {
+                fish.Add(data[i]);
+                fishs++;
+            }
+            numRowsF = fishs+numRowsC;
+            Console.WriteLine("Num rows F " + numRowsF);
+            return fish.ToArray();
+        }
+        public string[] getScrap_Metal(string[] data)
+        {
+            string[] Scrap = data[numRowsF + 2].Split(",");
+            Console.WriteLine(Scrap[0]);
+            numRowsS = numRowsF + int.Parse(scrap[0]);
+            for (int i = numRowsS; i < numRowsS; i++)
+            {
+                scrap.Add(data[i]);
+            }
+            
+            return scrap.ToArray();
+        }
 
-                if (text[i] == '-')
-                    break;
+
+
+        public string getQuota(string[] data)
+        {
+            numRowsS = numRowsC + numRowsF + vals;
+            Console.WriteLine("Num rows S " + numRowsS);
+            string[] Quota = data[numRowsS + 2].Split("=");
+            return Quota[1];
+        }
+        public string getQuotaM(string[] data)
+        {
+            string[] QuotaM = data[numRowsS + 3].Split("=");
+            return QuotaM[1];
+        }
+        public string[] getMapSize(string[] data)
+        {
+            List<string> values = new List<string>();
+            string[] MapSize = data[numRowsS + 3].Split("=");
+            values.Add(MapSize[1].Split(",")[0]);
+            values.Add(MapSize[1].Split(",")[1]);
+            Console.WriteLine("Maproe " + MapSize[0].Split(",")[0]);
+            return values.ToArray();
+        }
+        public string[] getMap(string[] data)
+        {
+            List<string> values = new List<string>();
+            string[] MapSize = data[numRowsS + 3].Split("=");
+            values.Add(MapSize[1].Split(",")[0]);
+            values.Add(MapSize[1].Split(",")[1]);
+            string[] mapD = values.ToArray();
+            int MapRow = int.Parse(mapD[0]);
+            //int MapCol = int.Parse(mapD[1]);
+            int Start = numRowsS + 5;
+            List<string> Map = new List<string>();
+            for (int s = Start; s < MapRow; s++)
+            {
+                Map.Add("" + data[s].Split(","));
             }
 
-            //go back to one char before start of number and remove extra chars from map
-            while (text[--i] != '\n' && text[i] != '\r' && text[i] != ' ')
-                Map = Map.Remove(Map.Length - 1);
-
-            Data = GetData(Map, 3);
-
-            ++i;
-
-            //landscape
-            for (; ; )
-            {
-                string start = "", stop = "", type = "";
 
 
-                while (text[i] != '-')
-                {
-                    if (i == text.Length - 1) return;
 
-                    start += text[i++];
-                }
-
-                ++i;
-
-                while (char.IsDigit(text[i]))
-                    stop += text[i++];
-
-
-                //go to type
-                while (text[i++] == ' ') { }
-
-                --i;
-
-                for (; i < text.Length && text[i] != '\n' && text[i] != '\r'; i++)
-                {
-                    type += text[i];
-
-                    if (i == text.Length - 1)
-                    {
-                        //landscapes.Add(new Landscape((int.Parse(start), int.Parse(stop)), string.Join("", type.Split(' ').Select(s => s[0])), type));
-
-                        return;
-                    }
-                }
-                //landscapes.Add(new Landscape((int.Parse(start), int.Parse(stop)), string.Join("", type.Split(' ').Select(s => s[0])), type));
-            }
-
-            //for (int k = 0; k < landscapeTypes.Count; k++)
+            //List<string> Map = new List<string>();
+            //for (int i = ; i < MapRow; i++)
             //{
-            //    Console.WriteLine(landscapeTypes[k].ToString());
+            //    for (int z = i; z < MapCol; z++)
+            //    {
+            //        Map.Add("(" + i + "," + z + ")");
+            //    }
             //}
-
-            //Console.WriteLine(map);  
-        }
-
-        string[] ReadAllTextFiles()
-        {
-            string[] filePaths = Directory.GetFiles(Path.Combine(Environment.CurrentDirectory, @"..\..\..", "maps"), "*.txt");
-
-            string[] all = new string[filePaths.Length];
-
-            for (int i = 0; i < filePaths.Length; i++)
-            {
-                all[i] = File.ReadAllText(filePaths[i]);
-            }
-
-            return all;
-
-            //if (FullPath == "")
-            //    path = Path.Combine(Environment.CurrentDirectory, @"..\..", path);
-            //else
-            //    path = FullPath;
-
-
-            //string text = File.ReadAllText(path);     
-        }
-
-        int[] GetData(string map, int numberLength)
-        {
-            return Enumerable.Range(0, map.Length / numberLength).Select(i => map.Substring(i * numberLength, numberLength)).Select(s => int.Parse(s)).ToArray();
-        }
-
-        public void PrintData(LANDSCAPE_TYPE type)
-        {
-            Console.WriteLine();
-            Console.Write("    ");
-            Console.BackgroundColor = ConsoleColor.DarkGray;
-            for (int k = 0; k < MapSize.X; k++)
-                Console.Write($"{k,-4}");
-            Console.BackgroundColor = ConsoleColor.Black;
-            Console.WriteLine("\n");
-
-            for (int y = 0; y < MapSize.Y; y++)
-            {
-                Console.BackgroundColor = ConsoleColor.DarkGray;
-                Console.Write($"{y,-4}");
-                Console.BackgroundColor = ConsoleColor.Black;
-
-                for (int x = 0; x < MapSize.X; x++)
-                {
-                    int i = (x, y).To1D(MapSize);
-
-                    //if (Data[i] >= landscapes[(int)type].elevationRange.min && Data[i] <= landscapes[(int)type].elevationRange.max)
-                    //{
-                    //    Console.ForegroundColor = ConsoleColor.Black;
-                    //    Console.BackgroundColor = ConsoleColor.Red;
-                    //}
-
-
-                    Console.Write($"{Data[i],-4}");
-
-                    Console.ForegroundColor = ConsoleColor.White;
-                    Console.BackgroundColor = ConsoleColor.Black;
-
-                }
-                Console.WriteLine("\n");
-            }
-            Console.Write("    ");
-            Console.BackgroundColor = ConsoleColor.DarkGray;
-            for (int k = 0; k < MapSize.X; k++)
-                Console.Write($"{k,-4}");
-            Console.BackgroundColor = ConsoleColor.Black;
-
-            Console.WriteLine("\n\n");
+            //string[] map = new string[2] { Map.ToArray(), Row.ToArray() };
+            //string[] MapSize = data[numRowsS + 5];
+            return Map.ToArray();
         }
     }
 }
