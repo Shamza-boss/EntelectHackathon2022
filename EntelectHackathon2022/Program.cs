@@ -4,7 +4,9 @@
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
+            FileReader fileReader = new FileReader();
+            string[] MapData = fileReader.Read();
+            Console.WriteLine(MapData);
         }
     }
 }
