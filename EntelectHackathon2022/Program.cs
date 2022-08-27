@@ -1,4 +1,5 @@
 ﻿using System.Data.Common;
+using System.Drawing;
 using System.IO;
 
 namespace EntelectHackathon2022
@@ -46,6 +47,93 @@ namespace EntelectHackathon2022
 
 
 
+    
+
+
+    
+
+    public class Cell
+    {
+        public int i { get; }
+        public int j { get; }
+
+        public int fcost { get; set; }
+        public int Gcost { get; set; }
+        public int Hcost { get; set; }
+        public bool InClosed { get; set; }
+        public Point Origin { get; set; }
+
+        public bool[] borders;
+        public Cell(int i, int j, bool[] borders, Point Origin, int FCost, int GCost)
+        {
+            this.i = i; this.j = j;
+            this.Origin = Origin;
+            this.borders = borders;
+            this.fcost = FCost;
+            this.Gcost = GCost;
+        }
+        public List<Cell> GetNeighbors(Cell[,] cells)
+        {
+            List<Cell> ls = new List<Cell>();
+            if (cells[i, j].borders[0] == false)//top                          
+                ls.Add(cells[i, j - 1]);
+            if (cells[i, j].borders[1] == false)//right                         
+                ls.Add(cells[i + 1, j]);
+            if (cells[i, j].borders[2] == false)//bottom                        
+                ls.Add(cells[i, j + 1]);
+            if (cells[i, j].borders[3] == false)//left                        
+                ls.Add(cells[i - 1, j]);
+
+            for (int k = 0; k < ls.Count; k++)
+            {
+                if (ls[k].Origin == new Point(ls[k].i, ls[k].j))
+                {
+                    var Fcostnew = FCost(cells);
+                    ls[k] = new Cell(ls[k].i, ls[k].j, ls[k].borders, new Point(i, j), 0, 0);
+                    ls[k].fcost = Fcostnew[0]; ls[k].Gcost = Fcostnew[1]; ls[k].Hcost = Fcostnew[2];
+                    cells[ls[k].i, ls[k].j] = ls[k];
+                }
+            }
+            return ls;
+        }
+        public Cell UpdateNeighbor(Cell[,] cells, Cell parent)
+        {
+            var Fcostnew = FCost(cells);
+            if (Fcostnew[1] < Gcost)
+            {
+                Origin = new Point(parent.i, parent.j);
+                fcost = Fcostnew[0]; Gcost = Fcostnew[1]; Hcost = Fcostnew[2];
+            }
+            var res = new Cell(i, j, borders, Origin, fcost, Gcost);
+            cells[i, j] = res;
+            return res;
+        }
+        int Herustic(Cell[,] cells,Cell end)
+        {
+            var c = Math.Abs(i - end.i) + Math.Abs(j - end.j);
+            cells[i, j].Hcost = c;
+            return c;
+        }
+        int GCost(Cell[,] cells)
+        {
+            var g = cells[Origin.X, Origin.Y].Gcost + 1;
+            cells[i, j].Gcost = g;
+            return g;
+        }
+        public int[] FCost(Cell[,] cells)
+        {
+            int[] res = new int[3];
+            res[1] = GCost(cells);
+            res[2] = Herustic(cells, cells[cells.GetLength(0) - 1, cells.GetLength(1) - 1]);
+            res[0] = res[1] + res[2];
+            //Console.WriteLine("InFcst... heurist:{0}  gCost:{1}",Herustic(),GCost());
+            cells[i, j].fcost = res[0];
+            return res;
+        }
+    }
+
+
+
 
 
 
@@ -63,6 +151,10 @@ namespace EntelectHackathon2022
         }
 
         
+
+
+
+   
         
         void Psuedo()
         {
