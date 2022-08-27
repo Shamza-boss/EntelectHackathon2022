@@ -12,6 +12,24 @@ namespace EntelectHackathon2022
         //ToDo:
         //Quota multiplier
         //Resources added
+
+        /*
+            Score score = new Score();
+
+            int allowance = 5;
+            double travelScore = 0;
+            bool scout = true;
+            int[] difficulty = {0,1,5,5,10,1,1};
+            double sum = 0;
+            
+            for(int i =0; i<6; i++)
+            {
+                Console.WriteLine(score.calcScore(difficulty[i],i,5, travelScore, scout, false).ToString());
+                sum += score.calcScore(difficulty[i], i, 5, travelScore, scout, false);
+            }
+            Console.WriteLine((2*(200 + 400 + sum)).ToString()); // 2 fish, + 2 coal, + x2 multiplier
+         */
+
         public double calcScore(int difficulty, int currentStep, int allowance, double travelScore, bool scout, bool quotoFulfilled)
         {
             if(currentStep == 0) //step 0 does not count, and would cause div0 error
