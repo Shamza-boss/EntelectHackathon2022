@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\clift\\Desktop\\EntelectHackathon\\EntelectHackathon2022\\EntelectHackathon2022.csproj": {}
+    "C:\\Users\\clift\\Source\\Repos\\EntelectHackathon2022\\EntelectHackathon2022\\EntelectHackathon2022.csproj": {}
   },
   "projects": {
-    "C:\\Users\\clift\\Desktop\\EntelectHackathon\\EntelectHackathon2022\\EntelectHackathon2022.csproj": {
+    "C:\\Users\\clift\\Source\\Repos\\EntelectHackathon2022\\EntelectHackathon2022\\EntelectHackathon2022.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\clift\\Desktop\\EntelectHackathon\\EntelectHackathon2022\\EntelectHackathon2022.csproj",
+        "projectUniqueName": "C:\\Users\\clift\\Source\\Repos\\EntelectHackathon2022\\EntelectHackathon2022\\EntelectHackathon2022.csproj",
         "projectName": "EntelectHackathon2022",
-        "projectPath": "C:\\Users\\clift\\Desktop\\EntelectHackathon\\EntelectHackathon2022\\EntelectHackathon2022.csproj",
+        "projectPath": "C:\\Users\\clift\\Source\\Repos\\EntelectHackathon2022\\EntelectHackathon2022\\EntelectHackathon2022.csproj",
         "packagesPath": "C:\\Users\\clift\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\clift\\Desktop\\EntelectHackathon\\EntelectHackathon2022\\obj\\",
+        "outputPath": "C:\\Users\\clift\\Source\\Repos\\EntelectHackathon2022\\EntelectHackathon2022\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
